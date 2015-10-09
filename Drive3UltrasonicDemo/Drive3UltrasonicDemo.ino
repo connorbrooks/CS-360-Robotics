@@ -30,9 +30,7 @@ void setup() {
 
 void loop() {
 	frontReading = getSonicDistance(frontSonicInputPin, frontSonicTriggerPin);
-	leftReading = getSonicDistance(leftSonicInputPin, leftSonicTriggerPin);
-	rightReading = getSonicDistance(rightSonicInputPin, rightSonicTriggerPin);
-
+  
 	Serial.print("Front: ");
 	Serial.print(frontReading);
 	Serial.print(",\tLeft: ");
@@ -42,18 +40,29 @@ void loop() {
 
 	if(frontReading > 70){
 		//go forward
-		analogWrite(leftMotorPin, 200);
-		analogWrite(rightMotorPin, 200);
+		analogWrite(leftMotorPin, 60);
+		analogWrite(rightMotorPin, 60);
 	} else {
+
+    analogWrite(leftMotorPin, 0);
+    analogWrite(rightMotorPin, 0);
+    
+    leftReading = getSonicDistance(leftSonicInputPin, leftSonicTriggerPin);
+  
+    rightReading = getSonicDistance(rightSonicInputPin, rightSonicTriggerPin);
+
+    //poll and turn whichever way has more space
 		//turn whichever way has more space
 		if(rightReading > leftReading){
 			//turn right
-			analogWrite(leftMotorPin, 150);
-			analogWrite(rightMotorPin, 1);
+			analogWrite(leftMotorPin, 50);
+			analogWrite(rightMotorPin, 0);
+      delay(200);
 		} else{
 			//turn left
-			analogWrite(rightMotorPin, 150);
-			analogWrite(leftMotorPin, 1);
+			analogWrite(rightMotorPin, 50);
+			analogWrite(leftMotorPin, 0);
+      delay(200);
 		}
 	}
 
