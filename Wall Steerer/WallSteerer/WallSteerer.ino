@@ -50,12 +50,12 @@ void loop() {
   	lastRight = rightReading;
     rightReading = getSonicDistance(rightSonicInputPin, rightSonicTriggerPin);
 
-	Serial.print("Front: ");
-	Serial.print(frontReading);
-	Serial.print(",\tLeft: ");
-	Serial.print(leftReading);
-	Serial.print(",\tRight: ");
-	Serial.println(rightReading);
+	//Serial.print("Front: ");
+	//Serial.print(frontReading);
+	//Serial.print(",\tLeft: ");
+	//Serial.print(leftReading);
+	//Serial.print(",\tRight: ");
+	//Serial.println(rightReading);
 
 	if(frontReading > 70){
 		//go forward
@@ -64,19 +64,17 @@ void loop() {
 
     	if(adjustsNeeded[0] = true){
     		//turn left some
-    		analogWrite(leftMotorPin, 25);
+    		analogWrite(leftMotorPin, 0);
 				analogWrite(rightMotorPin, 60);
     	} else if (adjustsNeeded[1] = true) {
     		//turn right some
 			  analogWrite(leftMotorPin, 60);
-			  analogWrite(rightMotorPin, 25);
+			  analogWrite(rightMotorPin, 0);
 		  } else {
         //go straight
         analogWrite(leftMotorPin, 60);
         analogWrite(rightMotorPin, 60);   
 		  }
-
-		delay(50);
 
 	} else {
 	//stop movement and poll sides again
@@ -96,15 +94,13 @@ void loop() {
 			//turn right
 			analogWrite(leftMotorPin, 50);
 			analogWrite(rightMotorPin, 0);
-      		delay(200);
 		} else{
 			//turn left
 			analogWrite(rightMotorPin, 50);
 			analogWrite(leftMotorPin, 0);
-      		delay(200);
 		}
 	}
-
+  delay(200);
 }
 
 
@@ -115,13 +111,13 @@ void checkAngularDistance(){
 			//use geometric identities to estimate absolute distance to nearest wall on left side;
 			angularDist = (long) ( (double)frontReading * sin(atan(((double)leftReading/(double)frontReading))) );
 			//see if we need to turn towards the right some
-			adjustsNeeded[1] = (angularDist < 70);
+			adjustsNeeded[1] = (angularDist < 20);
 	} else {
 			adjustsNeeded[1] = false;
 			//use geometric identities to estimate absolute distance to nearest wall on right side;
 			angularDist = (long) ( (double)frontReading * sin(atan(((double)rightReading/(double)frontReading))) );
 			//see if we need to turn towards the left some
-			adjustsNeeded[0] = (angularDist < 70);
+			adjustsNeeded[0] = (angularDist < 20);
 	}
 }
 
